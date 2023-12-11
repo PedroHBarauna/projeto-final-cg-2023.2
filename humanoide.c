@@ -115,7 +115,7 @@ void init(void)
   glMatrixMode(GL_PROJECTION); // define que a matrix é a de projeção
   glLoadIdentity();            // carrega a matrix de identidade
   // glOrtho(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção ortogonal
-  gluPerspective(45.0, 1.0, 2.0, 8.0); // define uma projeção perspectiva
+  gluPerspective(45.0, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 800); // define uma projeção perspectiva
   // glFrustum(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção perspectiva simétrica
   // glFrustum(-2.0, 1.0, -1.0, 2.0, 2.0, 8.0); //define uma projeção perspectiva obliqua
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -371,7 +371,6 @@ void desenha()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
-  gluPerspective(lookingAngle, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 800);
 
   if (!flagRotating)
   {
