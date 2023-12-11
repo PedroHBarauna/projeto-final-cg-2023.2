@@ -503,14 +503,14 @@ void keyboard(unsigned char key, int x, int y)
   {
     if (characterPosY < 0.3)
     {
-      characterPosY += 0.1;
+      characterPosY += 0.05;
     }
     else
       flagJumping = 0;
   }
 
-  if (!flagJumping && characterPosY > 0.1)
-    characterPosY -= 0.1;
+  if (!flagJumping && characterPosY > 0.005)
+    characterPosY -= 0.005;
 
   glutPostRedisplay();
 }
