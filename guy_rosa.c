@@ -1,7 +1,4 @@
-#include <glut.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "utils.h"
 
 #define PI 3.14159265358979323846
 

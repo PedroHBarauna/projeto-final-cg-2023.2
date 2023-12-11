@@ -1,9 +1,4 @@
-#include <glut.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#define PI 3.14159265358979323846
+#include "utils.h"
 
 float thetaX = 0.0;
 float thetaY = 0.0;
@@ -268,7 +263,7 @@ void desenha()
     glPopMatrix();
 
     glPushMatrix();
-    printf("ang = %f\n", thetaX);
+    printf("angMembros = %f\n", thetaX);
     if (girando)
     {
         glTranslatef(X, 0.0, Z);
@@ -277,14 +272,11 @@ void desenha()
     }
     else
     {
-        glTranslatef(X, 0.0, Z);
-        glRotatef(angulo, 0.0, 1.0, 0.0);
         X += moveZ * sin(angX * PI / 180);
         Z += moveZ * cos(angX * PI / 180);
+        glTranslatef(X, 0.0, Z);
+        glRotatef(angulo, 0.0, 1.0, 0.0);
     }
-
-    // Modificação aqui: ajustar a movimentação no eixo Z
-    glTranslatef(0.0, 0.0, moveZ);
 
     robo();
     glPopMatrix();
@@ -305,7 +297,7 @@ void teclado(unsigned char key, int x, int y)
     case 'A':
         girando = 1;
         moveZ = -0.01;
-        angX -= 1;
+        angX += 1;
         break;
     case 's':
     case 'S':
@@ -316,16 +308,18 @@ void teclado(unsigned char key, int x, int y)
     case 'D':
         girando = 1;
         moveZ = 0.01;
-        angX += 1;
+        angX -= 1;
         break;
     default:
         break;
     }
+
     if (thetaX >= 12)
         inc = -1.0;
     else if (thetaX <= -12)
         inc = 1.0;
     thetaX += inc;
+
     glutPostRedisplay();
 }
 

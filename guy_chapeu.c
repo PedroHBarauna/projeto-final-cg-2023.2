@@ -1,9 +1,4 @@
-#include <glut.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#define PI 3.14159265358979323846
+#include "utils.h"
 
 float thetaX = 0.0;
 float thetaY = 0.0;
