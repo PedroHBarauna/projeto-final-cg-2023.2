@@ -20,13 +20,11 @@ typedef struct BMPImagem {
   char *data;
 } BMPImage;
 
-#define MAX_NO_TEXTURES 6
-
 GLuint texture_id[MAX_NO_TEXTURES];
 
 char *filenameArray[MAX_NO_TEXTURES] = {"apple.bmp", "banana.bmp",
 "grape.bmp", "cherry.bmp",
-"orange.bmp", "watermelon.bmp"};
+"orange.bmp", "watermelon.bmp", "default.bmp"};
 
 int getRandomTexture() {
     return (rand() % 6) + 1;
