@@ -11,10 +11,12 @@ float anguloDeVista = 0.0;
 float anguloAux = 0.0;
 float i = 1.0;
 float cameraX;
-int textura_atual=0;
+int textura_atual = 0;
 int flagTextura = 0;
-
-typedef struct BMPImagem {
+float thetaX = 0.0;
+float inc = 1.0;
+typedef struct BMPImagem
+{
   int width;
   int height;
   char *data;
@@ -23,15 +25,17 @@ typedef struct BMPImagem {
 GLuint texture_id[MAX_NO_TEXTURES];
 
 char *filenameArray[MAX_NO_TEXTURES] = {"apple.bmp", "banana.bmp",
-"grape.bmp", "cherry.bmp",
-"orange.bmp", "watermelon.bmp", "default.bmp"};
+                                        "grape.bmp", "cherry.bmp",
+                                        "orange.bmp", "watermelon.bmp", "default.bmp"};
 
-int getRandomTexture() {
-    return (rand() % 6) + 1;
+int getRandomTexture()
+{
+  return (rand() % 6) + 1;
 }
 
 /*Carrega os arquivos bmps e os converte*/
-void getBitmapImageData(char *pFileName, BMPImage *pImage) {
+void getBitmapImageData(char *pFileName, BMPImage *pImage)
+{
   FILE *pFile = NULL;
   unsigned short nNumPlanes;
   unsigned short nNumBPP;
@@ -75,7 +79,8 @@ void getBitmapImageData(char *pFileName, BMPImage *pImage) {
            pFileName);
 
   char charTemp;
-  for (i = 0; i < nTotalImagesize; i += 3) {
+  for (i = 0; i < nTotalImagesize; i += 3)
+  {
     charTemp = pImage->data[i];
     pImage->data[i] = pImage->data[i + 2];
     pImage->data[i + 2] = charTemp;
@@ -83,14 +88,16 @@ void getBitmapImageData(char *pFileName, BMPImage *pImage) {
 }
 
 /*Função para Carregar uma imagem .BMP */
-void CarregaTexturas() {
+void CarregaTexturas()
+{
   BMPImage textura;
 
   /* Define quantas texturas serão usadas no programa  */
-  glGenTextures(MAX_NO_TEXTURES, texture_id); 
+  glGenTextures(MAX_NO_TEXTURES, texture_id);
 
   int i;
-  for (i = 0; i < MAX_NO_TEXTURES; i++) {
+  for (i = 0; i < MAX_NO_TEXTURES; i++)
+  {
     getBitmapImageData(filenameArray[i], &textura);
     glBindTexture(GL_TEXTURE_2D, texture_id[i]);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, textura.width, textura.height, 0, GL_RGB,
@@ -103,14 +110,16 @@ void CarregaTexturas() {
 }
 
 /*Inicia a textura*/
-void initTexture(void) {
+void initTexture(void)
+{
   glEnable(GL_TEXTURE_2D);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
   CarregaTexturas();
 }
 
-void chao() {
+void chao()
+{
   glPushMatrix();
   glTranslatef(0.0, -0.5, 0.0);
   glScalef(3.5, 0.5, 3.5);
@@ -145,7 +154,8 @@ void chao() {
   glEnd();
   /* Face da Textura */
   /* se for modificar a textura colocar flag como 1, se não, pode manter como 0 */
-  if(flagTextura==1){
+  if (flagTextura == 1)
+  {
     textura_atual = getRandomTexture();
     glBindTexture(GL_TEXTURE_2D, texture_id[textura_atual]);
     glBegin(GL_POLYGON);
@@ -159,7 +169,8 @@ void chao() {
     glVertex3f(-0.25, 0.25, -0.25);
     glEnd();
   }
-  else {
+  else
+  {
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glVertex3f(-0.25, -0.25, 0.25);
@@ -179,7 +190,8 @@ void chao() {
   glPopMatrix();
 }
 
-void lightning() {
+void lightning()
+{
   GLfloat light0_pos[] = {2.0f, 2.0f, 2.0f, 1.0f};
   GLfloat white[] = {1.0f, 1.0f, 1.0f, 1.0f};
   GLfloat black[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -203,7 +215,8 @@ void lightning() {
   glEnable(GL_LIGHT1);
 }
 
-void init(void) {
+void init(void)
+{
   glEnable(GL_COLOR_MATERIAL);
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glEnable(GL_DEPTH_TEST);
@@ -225,218 +238,170 @@ void init(void) {
   lightning();
 }
 /* Início do Corpo teste para o cenário */
-void corpo() {
-  glPushMatrix();
 
+void corpo()
+{
   glPushMatrix();
-  glScalef(0.3, 0.7, 0.31);
-  glTranslatef(0.0, 0.1, 0.031);
-  glColor3f(1.0, 0.0, 0.0);
-  glutSolidSphere(0.3, 20, 20);
-  glPopMatrix();
+  glScalef(0.5, 1.0, 0.41);
 
-  glPushMatrix();
-  glScalef(0.35, 0.40, 0.38);
-  glTranslatef(0.0, -0.09, 0.031);
-  glColor3f(0.0, 0.5, 0.5);
+  // Esfera esticada para simular o corpo de Fall Guys
+  glColor3f(1.0, 0.5, 0.8); // Cor amarela
   glutSolidSphere(0.3, 20, 20);
-  glPopMatrix();
 
   glPopMatrix();
 }
 
-void pescoco() {
+void cabeca()
+{
   glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(0.0, 0.32, 0.021);
-  glScalef(0.03, 0.09, 0.05);
-  glutSolidSphere(0.8, 20, 20);
-  glPopMatrix();
-}
-
-void cabeca() {
-  glPushMatrix();
-  glTranslatef(0.0, 0.42, 0.021);
+  glTranslatef(0.0, 0.10, 0.031);
   glScalef(0.4, 0.5, 0.4);
 
-  glColor3f(0.6118, 0.4471, 0.2824);
+  // Desenhar uma esfera para a cabeça
+  glColor3f(1.0, 1.0, 1.0); // Cor branca
   glutSolidSphere(0.25, 20, 20);
 
   glPopMatrix();
 }
 
-void cabelo() {
+void OlhoD()
+{
+  // Desenhar olho direito
   glPushMatrix();
-  glTranslatef(0.0, 0.53, -0.09);
-  glColor3f(0.1, 0.1, 0.1);
-  glutSolidSphere(0.15, 21, 20);
+  glTranslatef(0.03, 0.1, 0.1);  // Posição do olho direito
+  glScalef(0.8, 1.5, 1.0);       // Proporção de escala vertical (aumentei para 1.5)
+  glColor3f(0.0, 0.0, 0.0);      // Cor preta
+  glutSolidSphere(0.03, 10, 10); // Reduzi o raio para 0.03
   glPopMatrix();
 }
 
-void OlhoDireito() {
+void OlhoE()
+{
+  // Desenhar olho esquerdo
   glPushMatrix();
-  glTranslatef(0.03, 0.4, 0.1);
-  glScalef(0.8, 1.5, 1.0);
-  glColor3f(0.0, 0.0, 0.0);
-  glutSolidSphere(0.03, 10, 10);
+  glTranslatef(-0.03, 0.1, 0.1); // Posição do olho esquerdo
+  glScalef(0.8, 1.5, 1.0);       // Proporção de escala vertical (aumentei para 1.5)
+  glColor3f(0.0, 0.0, 0.0);      // Cor preta
+  glutSolidSphere(0.03, 10, 10); // Reduzi o raio para 0.03
   glPopMatrix();
 }
 
-void OlhoEsquerdo() {
+void bracoDireito()
+{
   glPushMatrix();
-  glTranslatef(-0.03, 0.4, 0.1);
-  glScalef(0.8, 1.5, 1.0);
-  glColor3f(0.0, 0.0, 0.0);
-  glutSolidSphere(0.03, 10, 10);
-  glPopMatrix();
-}
-
-void bracoDireito() {
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-
-  glTranslatef(0.09, 0.15, 0.0);
-  glRotatef(18.0, 0.0, 0.0, 1.0);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.03, 0.12, 0.05);
-  glutSolidSphere(0.8, 20, 20);
-
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-
-  glTranslatef(0.12, 0.1, 0.0);
-  glRotatef(17.0, 0.0, 0.0, 1.0);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.03, 0.09, 0.05);
-  glutSolidSphere(0.8, 20, 20);
-
-  glPopMatrix();
-}
-
-void bracoEsquerdo() {
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-
-  glTranslatef(-0.09, 0.15, 0.0);
-  glRotatef(-18.0, 0.0, 0.0, 1.0);
-  glRotatef(-rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.03, 0.12, 0.05);
-  glutSolidSphere(0.8, 20, 20);
-
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-
-  glTranslatef(-0.12, 0.1, 0.0);
-  glRotatef(-17.0, 0.0, 0.0, 1.0);
-  glRotatef(-rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.03, 0.09, 0.05);
-  glutSolidSphere(0.8, 20, 20);
-
-  glPopMatrix();
-}
-
-void pernaDireita() {
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(-0.05, -0.3, 0.0);
-  glRotatef(-rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.065, 0.03);
+  glColor3f(1.0, 0.5, 0.8);
+  glTranslatef(0.15, 0.02, 0.0);  // Ajuste do deslocamento lateral
+  glRotatef(45.0, 0.0, 0.0, 1.0); // Rotação para inclinar o braço
+  glRotatef(thetaX, 1.0, 0.0, 0.0);
+  glScalef(0.04, 0.26, 0.06);
   glutSolidSphere(1.0, 20, 20);
   glPopMatrix();
+}
 
+void bracoEsquerdo()
+{
   glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(-0.05, -0.19, 0.0);
-  glRotatef(-rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.065, 0.03);
+  glColor3f(1.0, 0.5, 0.8);
+  glTranslatef(-0.15, 0.02, 0.0);  // Ajuste do deslocamento lateral
+  glRotatef(-45.0, 0.0, 0.0, 1.0); // Rotação para inclinar o braço
+  glRotatef(-thetaX, 1.0, 0.0, 0.0);
+  glScalef(0.04, 0.26, 0.06);
   glutSolidSphere(1.0, 20, 20);
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(-0.05, -0.25, 0.0);
-  glutSolidSphere(0.023, 20, 20);
   glPopMatrix();
 }
 
-void pernaEsquerda() {
+void pernaDireita()
+{
   glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(0.05, -0.3, 0.0);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.065, 0.03);
-  glutSolidSphere(1.0, 20, 20);
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(0.05, -0.19, 0.0);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.065, 0.03);
-  glutSolidSphere(1.0, 20, 20);
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(0.6118, 0.4471, 0.2824);
-  glTranslatef(0.05, -0.25, 0.0);
-  glutSolidSphere(0.023, 20, 20);
+  glTranslatef(-0.05, -0.25, 0.0); // Ajuste da posição da perna
+  glRotatef(-thetaX, 1.0, 0.0, 0.0);
+  glColor3f(1.0, 0.5, 0.8);     // Cor
+  glScalef(0.04, 0.13, 0.06);   // Ajuste da escala para uma esfera mais alongada
+  glutSolidSphere(1.0, 20, 20); // Substituição do cubo por uma esfera
   glPopMatrix();
 }
 
-void peDireito() {
+void pernaEsquerda()
+{
   glPushMatrix();
-  glColor3f(0.0, 0.0, 0.0);
+  glTranslatef(0.05, -0.25, 0.0); // Ajuste da posição da perna
+  glRotatef(thetaX, 1.0, 0.0, 0.0);
+  glColor3f(1.0, 0.5, 0.8);     // Cor
+  glScalef(0.04, 0.13, 0.06);   // Ajuste da escala para uma esfera mais alongada
+  glutSolidSphere(1.0, 20, 20); // Substituição do cubo por uma esfera
+  glPopMatrix();
+}
+
+void peDireito()
+{
+  glPushMatrix();
   glTranslatef(-0.05, -0.35, 0.02);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.03, 0.07);
-  glutSolidSphere(1.0, 20, 20);
+  glRotatef(thetaX, 1.0, 0.0, 0.0);
+  glColor3f(1.0, 0.5, 0.8);     // Cor
+  glScalef(0.02, 0.03, 0.07);   // Ajuste da escala para uma esfera mais pequena
+  glutSolidSphere(1.0, 20, 20); // Desenhar pé direito
   glPopMatrix();
 }
 
-void peEsquerdo() {
+void peEsquerdo()
+{
   glPushMatrix();
-  glColor3f(0.0, 0.0, 0.0);
-  glTranslatef(0.05, -0.35, 0.02);
-  glRotatef(rotacaoMembros, 1.0, 0.0, 0.0);
-  glScalef(0.02, 0.03, 0.07);
-  glutSolidSphere(1.0, 20, 20);
+  glTranslatef(0.05, -0.35, 0.02); // Ajuste da posição do pé esquerdo
+  glRotatef(thetaX, 1.0, 0.0, 0.0);
+  glColor3f(1.0, 0.5, 0.8);     // Cor
+  glScalef(0.02, 0.03, 0.07);   // Ajuste da escala para uma esfera mais pequena
+  glutSolidSphere(1.0, 20, 20); // Desenhar pé esquerdo
   glPopMatrix();
 }
 
-void human() {
+void coroa()
+{
+  glPushMatrix();
+  glTranslatef(0.0, 0.4, 0.0); // Ajuste da posição da coroa em relação à cabeça
+
+  // Adiciona uma rotação de -90 graus em torno do eixo x para deitar a coroa
+  glRotatef(-90.0, 1.0, 0.0, 0.0);
+
+  glColor3f(1.0, 0.843, 0.0);         // Cor dourada para a coroa
+  glutSolidTorus(0.02, 0.08, 10, 15); // Desenhar uma coroa usando um toro sólido
+  glPopMatrix();
+}
+
+void fall_guy()
+{
   cabeca();
-  cabelo();
+  coroa();
   corpo();
-  pescoco();
-  OlhoEsquerdo();
-  OlhoDireito();
+  OlhoE();
+  OlhoD();
   bracoDireito();
   bracoEsquerdo();
   pernaDireita();
   pernaEsquerda();
-  peDireito();
-  peEsquerdo();
+  peDireito();  // Adiciona o pé direito
+  peEsquerdo(); // Adiciona o pé esquerdo
 }
 
-void desenha() {
+void desenha()
+{
   glClearColor(0, 0, 0, 0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
-  if (!flagRotating) {
+  if (!flagRotating)
+  {
     characterPosX += moveZ * sin(anguloDeVista * PI / 180);
     characterPosZ += moveZ * cos(anguloDeVista * PI / 180);
   }
 
-  if (flagFreeCamera) {
+  if (flagFreeCamera)
+  {
     cameraPosX = characterPosX - 4 * sin(anguloAux * PI / 180);
     cameraPosY = 1.5;
     cameraPosZ = characterPosZ - 4 * cos(anguloAux * PI / 180);
-  } else {
+  }
+  else
+  {
     cameraPosX = characterPosX - 4 * sin(anguloDeVista * PI / 180);
     cameraPosY = 1.5;
     cameraPosZ = characterPosZ - 4 * cos(anguloDeVista * PI / 180);
@@ -452,16 +417,19 @@ void desenha() {
 
   glPushMatrix();
 
-  if (flagRotating) {
+  if (flagRotating)
+  {
     glTranslatef(characterPosX, characterPosY, characterPosZ);
     glRotatef(anguloDeVista, 0.0, 1.0, 0.0);
     angulo = anguloDeVista;
-  } else {
+  }
+  else
+  {
     glTranslatef(characterPosX, characterPosY, characterPosZ);
     glRotatef(angulo, 0.0, 1.0, 0.0);
   }
   /* Desenha o Corpo teste */
-  //human();
+  fall_guy();
   glPopMatrix();
 
   /* Inicio Criação dos Chãos */
@@ -572,12 +540,15 @@ void desenha() {
   glFlush();
 }
 
-void rotacoes(int key, int x, int y) {
-  if (flagFreeCamera == 0) {
+void rotacoes(int key, int x, int y)
+{
+  if (flagFreeCamera == 0)
+  {
     anguloAux = anguloDeVista;
   }
 
-  switch (key) {
+  switch (key)
+  {
   case GLUT_KEY_RIGHT:
     flagFreeCamera = 1;
     anguloAux -= 1;
@@ -600,8 +571,10 @@ void rotacoes(int key, int x, int y) {
   glutPostRedisplay();
 }
 
-void keyboard(unsigned char key, int x, int y) {
-  switch (key) {
+void keyboard(unsigned char key, int x, int y)
+{
+  switch (key)
+  {
   case 'w':
   case 'W':
     flagFreeCamera = 0;
@@ -631,15 +604,16 @@ void keyboard(unsigned char key, int x, int y) {
   default:
     break;
   }
-  if (rotacaoMembros >= 12)
-    i = -1.0;
-  else if (rotacaoMembros <= -12)
-    i = 1.0;
-  rotacaoMembros += i;
+  if (thetaX >= 12)
+    inc = -1.0;
+  else if (thetaX <= -12)
+    inc = 1.0;
+  thetaX += inc;
   glutPostRedisplay();
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowPosition(50, 50);
