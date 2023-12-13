@@ -14,6 +14,8 @@ float inc = 1.0;
 float eyeX, eyeY, eyeZ;
 float X = 0.0, Z = 0.0;
 
+GLUquadricObj *obj;
+
 void chao()
 {
   glPushMatrix();
@@ -119,6 +121,10 @@ void init(void)
   // glFrustum(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção perspectiva simétrica
   // glFrustum(-2.0, 1.0, -1.0, 2.0, 2.0, 8.0); //define uma projeção perspectiva obliqua
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+
+  obj = gluNewQuadric();
+  gluQuadricDrawStyle(obj,GLU_LINE);
 
   lightning();
 }
@@ -419,6 +425,14 @@ void desenha()
 
   glPushMatrix();
   chao();
+  glPopMatrix();
+
+  glPushMatrix();
+
+  // FUNDO (?) branco
+  glColor3f(1.0, 1.0, 1.0);
+  glutSolidSphere(700,10,10);
+
   glPopMatrix();
 
   glFlush();
