@@ -11,7 +11,7 @@ float anguloDeVista = 0.0;
 float anguloAux = 0.0;
 float i = 1.0;
 float cameraX;
-int textura_atual[16];
+int textura_atual[17];
 int flagTextura = 0;
 float thetaX = 0.0;
 float inc = 1.0;
@@ -382,6 +382,176 @@ void fall_guy()
   peEsquerdo(); // Adiciona o pé esquerdo
 }
 
+
+void teloes(){
+
+
+    flagTextura = 1;
+    glPushMatrix();
+    glTranslatef(0.0, 1.0, 5.0);
+    glRotatef(-90, 1.0, 0.0, 0.0);
+    glRotatef(180, 0.0, 1.0, 0.0);
+    chao(16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.0, 1.0, -5.0);
+    glRotatef(90, 1.0, 0.0, 0.0);
+    chao(16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(5.0, 1.0, 0.0);
+    glRotatef(90, 1.0, 0.0, 0.0);
+    glRotatef(90, 0.0, 0.0, 1.0);
+    chao(16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-5.0, 1.0, 0.0);
+    glRotatef(-90, 1.0, 0.0, 0.0);
+    glRotatef(-90, 0.0, 0.0, 1.0);
+    glRotatef(180, 0.0, 1.0, 0.0);
+    chao(16);
+    glPopMatrix();
+}
+
+void plataformas(){
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(0.9, 0.0, 0.9);
+  flagTextura = 1;
+  chao(0);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(0.9, 0.0, -0.9);
+  flagTextura = 1;
+  chao(1);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(0.9, 0.0, 2.7);
+  flagTextura = 1;
+  chao(2);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(0.9, 0.0, -2.7);
+  flagTextura = 1;
+  chao(3);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-0.9, 0.0, 0.9);
+  flagTextura = 1;
+  chao(4);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-0.9, 0.0, -0.9);
+  flagTextura = 1;
+  chao(5);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-0.9, 0.0, 2.7);
+  flagTextura = 1;
+  chao(6);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-0.9, 0.0, -2.7);
+  flagTextura = 1;
+  chao(7);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(2.7, 0.0, 0.9);
+  flagTextura = 1;
+  chao(8);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(2.7, 0.0, -0.9);
+  flagTextura = 1;
+  chao(9);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(2.7, 0.0, 2.7);
+  flagTextura = 1;
+  chao(10);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(2.7, 0.0, -2.7);
+  flagTextura = 1;
+  chao(11);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-2.7, 0.0, 0.9);
+  flagTextura = 1;
+  chao(12);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-2.7, 0.0, -0.9);
+  flagTextura = 1;
+  chao(13);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-2.7, 0.0, 2.7);
+  flagTextura = 1;
+  chao(14);
+  flagTextura = 0;
+
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-2.7, 0.0, -2.7);
+  flagTextura = 1;
+  chao(15);
+  flagTextura = 0;
+
+  glPopMatrix();
+}
+
+void cenario(){
+  teloes();
+  plataformas();
+}
+
 void desenha()
 {
   glClearColor(0, 0, 0, 0);
@@ -433,135 +603,9 @@ void desenha()
   glPopMatrix();
 
   /* Inicio Criação dos Chãos */
+  teloes();
+  plataformas();
 
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, 0.9);
-  flagTextura = 1;
-  chao(0);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, -0.9);
-  flagTextura = 1;
-  chao(1);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, 2.7);
-  flagTextura = 1;
-  chao(3);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, -2.7);
-  flagTextura = 1;
-  chao(4);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, 0.9);
-  flagTextura = 1;
-  chao(5);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, -0.9);
-  flagTextura = 1;
-  chao(6);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, 2.7);
-  flagTextura = 1;
-  chao(7);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, -2.7);
-  flagTextura = 1;
-  chao(8);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, 0.9);
-  flagTextura = 1;
-  chao(9);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, -0.9);
-  flagTextura = 1;
-  chao(10);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, 2.7);
-  flagTextura = 1;
-  chao(11);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, -2.7);
-  flagTextura = 1;
-  chao(12);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, 0.9);
-  flagTextura = 1;
-  chao(13);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, -0.9);
-  flagTextura = 1;
-  chao(14);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, 2.7);
-  flagTextura = 1;
-  chao(15);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, -2.7);
-  flagTextura = 1;
-  chao(16);
-  flagTextura = 0;
-
-  glPopMatrix();
 
   /* Fim Criação dos Chãos */
 
