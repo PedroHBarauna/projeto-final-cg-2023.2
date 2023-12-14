@@ -156,7 +156,7 @@ void chao(int id)
   /* se for modificar a textura colocar flag como 1, se não, pode manter como 0 */
   if (flagTextura == 1)
   {
-    
+
     glBindTexture(GL_TEXTURE_2D, texture_id[textura_atual[id]]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -229,7 +229,7 @@ void init(void)
   glLoadIdentity();
 
   // glOrtho(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção ortogonal
-  gluPerspective(45.0, 1.0, 2.0, 8.0); // define uma projeção perspectiva
+  gluPerspective(80.0, 1.0, 0.1, 800.0); // define uma projeção perspectiva
   // glFrustum(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção
   // perspectiva simétrica glFrustum(-2.0, 1.0, -1.0, 2.0, 2.0, 8.0); //define
   // uma projeção perspectiva obliqua
@@ -382,41 +382,41 @@ void fall_guy()
   peEsquerdo(); // Adiciona o pé esquerdo
 }
 
+void teloes()
+{
 
-void teloes(){
+  flagTextura = 1;
+  glPushMatrix();
+  glTranslatef(0.0, 1.0, 5.0);
+  glRotatef(-90, 1.0, 0.0, 0.0);
+  glRotatef(180, 0.0, 1.0, 0.0);
+  chao(16);
+  glPopMatrix();
 
+  glPushMatrix();
+  glTranslatef(0.0, 1.0, -5.0);
+  glRotatef(90, 1.0, 0.0, 0.0);
+  chao(16);
+  glPopMatrix();
 
-    flagTextura = 1;
-    glPushMatrix();
-    glTranslatef(0.0, 1.0, 5.0);
-    glRotatef(-90, 1.0, 0.0, 0.0);
-    glRotatef(180, 0.0, 1.0, 0.0);
-    chao(16);
-    glPopMatrix();
+  glPushMatrix();
+  glTranslatef(5.0, 1.0, 0.0);
+  glRotatef(90, 1.0, 0.0, 0.0);
+  glRotatef(90, 0.0, 0.0, 1.0);
+  chao(16);
+  glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(0.0, 1.0, -5.0);
-    glRotatef(90, 1.0, 0.0, 0.0);
-    chao(16);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(5.0, 1.0, 0.0);
-    glRotatef(90, 1.0, 0.0, 0.0);
-    glRotatef(90, 0.0, 0.0, 1.0);
-    chao(16);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-5.0, 1.0, 0.0);
-    glRotatef(-90, 1.0, 0.0, 0.0);
-    glRotatef(-90, 0.0, 0.0, 1.0);
-    glRotatef(180, 0.0, 1.0, 0.0);
-    chao(16);
-    glPopMatrix();
+  glPushMatrix();
+  glTranslatef(-5.0, 1.0, 0.0);
+  glRotatef(-90, 1.0, 0.0, 0.0);
+  glRotatef(-90, 0.0, 0.0, 1.0);
+  glRotatef(180, 0.0, 1.0, 0.0);
+  chao(16);
+  glPopMatrix();
 }
 
-void plataformas(){
+void plataformas()
+{
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(0.9, 0.0, 0.9);
@@ -547,7 +547,8 @@ void plataformas(){
   glPopMatrix();
 }
 
-void cenario(){
+void cenario()
+{
   teloes();
   plataformas();
 }
@@ -566,15 +567,15 @@ void desenha()
 
   if (flagFreeCamera)
   {
-    cameraPosX = characterPosX - 4 * sin(anguloAux * PI / 180);
-    cameraPosY = 1.5;
-    cameraPosZ = characterPosZ - 4 * cos(anguloAux * PI / 180);
+    cameraPosX = characterPosX - 2.8 * sin(anguloAux * PI / 180);
+    cameraPosY = 2.2;
+    cameraPosZ = characterPosZ - 2.8 * cos(anguloAux * PI / 180);
   }
   else
   {
-    cameraPosX = characterPosX - 4 * sin(anguloDeVista * PI / 180);
-    cameraPosY = 1.5;
-    cameraPosZ = characterPosZ - 4 * cos(anguloDeVista * PI / 180);
+    cameraPosX = characterPosX - 2.8 * sin(anguloDeVista * PI / 180);
+    cameraPosY = 2.2;
+    cameraPosZ = characterPosZ - 2.8 * cos(anguloDeVista * PI / 180);
   }
 
   printf("\nCoordenadas do boneco: %f; %f\n", characterPosX, characterPosZ);
@@ -582,7 +583,7 @@ void desenha()
 
   glLoadIdentity();
   gluLookAt(cameraPosX, cameraPosY, cameraPosZ, characterPosX,
-            characterPosY * 0.5, characterPosZ, 0.0, 1.0, 0.0);
+            characterPosY * 0.5, characterPosZ, 0.0, 10, 0.0);
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
   glPushMatrix();
@@ -606,7 +607,6 @@ void desenha()
   teloes();
   plataformas();
 
-
   /* Fim Criação dos Chãos */
 
   glFlush();
@@ -623,19 +623,19 @@ void rotacoes(int key, int x, int y)
   {
   case GLUT_KEY_RIGHT:
     flagFreeCamera = 1;
-    anguloAux -= 1;
+    anguloAux -= 2;
     break;
   case GLUT_KEY_LEFT:
     flagFreeCamera = 1;
-    anguloAux += 1;
+    anguloAux += 2;
     break;
   case GLUT_KEY_UP:
-    cameraX -= 1;
+    cameraX -= 2;
     flagFreeCamera = 1;
     break;
   case GLUT_KEY_DOWN:
     flagFreeCamera = 1;
-    cameraX += 1;
+    cameraX += 2;
     break;
   default:
     break;
@@ -657,8 +657,8 @@ void keyboard(unsigned char key, int x, int y)
   case 'A':
     flagFreeCamera = 0;
     flagRotating = 1;
-    moveZ = -0.1;
-    anguloDeVista += 1;
+    moveZ = -2.1;
+    anguloDeVista += 2.1;
     break;
   case 's':
   case 'S':
@@ -670,8 +670,8 @@ void keyboard(unsigned char key, int x, int y)
   case 'D':
     flagFreeCamera = 0;
     flagRotating = 1;
-    moveZ = 0.1;
-    anguloDeVista -= 1;
+    moveZ = 2.1;
+    anguloDeVista -= 2.1;
     break;
   default:
     break;
@@ -686,7 +686,8 @@ void keyboard(unsigned char key, int x, int y)
 
 int main(int argc, char *argv[])
 {
-  for(int cont = 0; cont < 16; cont++){
+  for (int cont = 0; cont < 16; cont++)
+  {
     textura_atual[cont] = getRandomTexture();
     printf("textura %d ", textura_atual[cont]);
   }
