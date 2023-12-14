@@ -11,7 +11,7 @@ float anguloDeVista = 0.0;
 float anguloAux = 0.0;
 float i = 1.0;
 float cameraX;
-int textura_atual = 0;
+int textura_atual[16];
 int flagTextura = 0;
 float thetaX = 0.0;
 float inc = 1.0;
@@ -118,7 +118,7 @@ void initTexture(void)
   CarregaTexturas();
 }
 
-void chao()
+void chao(int id)
 {
   glPushMatrix();
   glTranslatef(0.0, -0.5, 0.0);
@@ -156,8 +156,8 @@ void chao()
   /* se for modificar a textura colocar flag como 1, se não, pode manter como 0 */
   if (flagTextura == 1)
   {
-    textura_atual = getRandomTexture();
-    glBindTexture(GL_TEXTURE_2D, texture_id[textura_atual]);
+    
+    glBindTexture(GL_TEXTURE_2D, texture_id[textura_atual[id]]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-0.25, 0.25, 0.25);
@@ -438,7 +438,7 @@ void desenha()
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(0.9, 0.0, 0.9);
   flagTextura = 1;
-  chao();
+  chao(0);
   flagTextura = 0;
 
   glPopMatrix();
@@ -446,92 +446,120 @@ void desenha()
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(0.9, 0.0, -0.9);
   flagTextura = 1;
-  chao();
+  chao(1);
   flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(0.9, 0.0, 2.7);
-  chao();
+  flagTextura = 1;
+  chao(3);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(0.9, 0.0, -2.7);
-  chao();
+  flagTextura = 1;
+  chao(4);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-0.9, 0.0, 0.9);
-  chao();
+  flagTextura = 1;
+  chao(5);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-0.9, 0.0, -0.9);
-  chao();
+  flagTextura = 1;
+  chao(6);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-0.9, 0.0, 2.7);
-  chao();
+  flagTextura = 1;
+  chao(7);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-0.9, 0.0, -2.7);
-  chao();
+  flagTextura = 1;
+  chao(8);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(2.7, 0.0, 0.9);
-  chao();
+  flagTextura = 1;
+  chao(9);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(2.7, 0.0, -0.9);
-  chao();
+  flagTextura = 1;
+  chao(10);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(2.7, 0.0, 2.7);
-  chao();
+  flagTextura = 1;
+  chao(11);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(2.7, 0.0, -2.7);
-  chao();
+  flagTextura = 1;
+  chao(12);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-2.7, 0.0, 0.9);
-  chao();
+  flagTextura = 1;
+  chao(13);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-2.7, 0.0, -0.9);
-  chao();
+  flagTextura = 1;
+  chao(14);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-2.7, 0.0, 2.7);
-  chao();
+  flagTextura = 1;
+  chao(15);
+  flagTextura = 0;
 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-2.7, 0.0, -2.7);
-  chao();
+  flagTextura = 1;
+  chao(16);
+  flagTextura = 0;
 
   glPopMatrix();
 
@@ -614,6 +642,10 @@ void keyboard(unsigned char key, int x, int y)
 
 int main(int argc, char *argv[])
 {
+  for(int cont = 0; cont < 16; cont++){
+    textura_atual[cont] = getRandomTexture();
+    printf("textura %d ", textura_atual[cont]);
+  }
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowPosition(50, 50);
