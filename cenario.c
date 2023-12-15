@@ -229,7 +229,7 @@ void init(void)
   glLoadIdentity();
 
   // glOrtho(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção ortogonal
-  gluPerspective(80.0, 1.0, 0.1, 800.0); // define uma projeção perspectiva
+  gluPerspective(80.0, 1.0, 0.1, 700.0); // define uma projeção perspectiva
   // glFrustum(-2.0, 2.0, -2.0, 2.0, 2.0, 8.0); //define uma projeção
   // perspectiva simétrica glFrustum(-2.0, 1.0, -1.0, 2.0, 2.0, 8.0); //define
   // uma projeção perspectiva obliqua
@@ -547,10 +547,17 @@ void plataformas()
   glPopMatrix();
 }
 
+void fundo()
+{
+  glColor3f(0.31, 0.85, 0.83);
+  glutSolidSphere(700,10,10);
+}
+
 void cenario()
 {
   teloes();
   plataformas();
+  fundo();
 }
 
 void desenha()
@@ -604,8 +611,7 @@ void desenha()
   glPopMatrix();
 
   /* Inicio Criação dos Chãos */
-  teloes();
-  plataformas();
+  cenario();
 
   /* Fim Criação dos Chãos */
 
