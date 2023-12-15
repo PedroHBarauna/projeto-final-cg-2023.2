@@ -1,5 +1,15 @@
 #include "utils.h"
+#include <time.h>
+#include "pisos.h"
+#include "perfectmatch.c"
+#include <windows.h>
 
+struct timeval lastTime;
+int minPosicoes;
+int maxPosicoes;
+int pontuacao = 0;
+int intervaloPlataforma = 3000;
+int intervaloRodada = 10000;
 float rotacaoMembros = 0.0;
 int flagRotating = 0;
 int flagFreeCamera = 0;
@@ -12,6 +22,9 @@ float anguloAux = 0.0;
 float i = 1.0;
 float cameraX;
 int textura_atual[17];
+int textura_aux[16];
+int visibleBoard[16];
+int pisca = 0;
 int flagTextura = 0;
 float thetaX = 0.0;
 float inc = 1.0;
@@ -22,11 +35,17 @@ typedef struct BMPImagem
   char *data;
 } BMPImage;
 
+void timerRodada();
+void timerPlataforma();
+void timerPisca();
+void timerVerifica();
+
 GLuint texture_id[MAX_NO_TEXTURES];
 
-char *filenameArray[MAX_NO_TEXTURES] = {"apple.bmp", "banana.bmp",
+char *filenameArray[MAX_NO_TEXTURES] = {"default.bmp",
+                                        "apple.bmp", "banana.bmp",
                                         "grape.bmp", "cherry.bmp",
-                                        "orange.bmp", "watermelon.bmp", "default.bmp"};
+                                        "orange.bmp", "watermelon.bmp"};
 
 int getRandomTexture()
 {
@@ -415,19 +434,40 @@ void teloes()
   glPopMatrix();
 }
 
+int verificaChaoDoPersonagem()
+{
+  if(characterPosX <= 3.6 && characterPosX >= 1.8 && characterPosZ <= 3.6 && characterPosZ >= 1.8) return 0;
+  if(characterPosX <= 1.8 && characterPosX >= 0 && characterPosZ <= 3.6 && characterPosZ >= 1.8) return 1;
+  if(characterPosX <= 0 && characterPosX >= -1.8 && characterPosZ <= 3.6 && characterPosZ >= 1.8) return 2;
+  if(characterPosX <= -1.8 && characterPosX >= -3.6 && characterPosZ <= 3.6 && characterPosZ >= 1.8) return 3;
+  if(characterPosX <= 3.6 && characterPosX >= 1.8 && characterPosZ <= 1.8 && characterPosZ >= 0) return 4;
+  if(characterPosX <= 1.8 && characterPosX >= 0 && characterPosZ <= 1.8 && characterPosZ >= 0) return 5;
+  if(characterPosX <= 0 && characterPosX >= -1.8 && characterPosZ <= 1.8 && characterPosZ >= 0) return 6;
+  if(characterPosX <= -1.8 && characterPosX >= -3.6 && characterPosZ <= 1.8 && characterPosZ >= 0) return 7;
+  if(characterPosX <= 3.6 && characterPosX >= 1.8 && characterPosZ <= 0 && characterPosZ >= -1.8) return 8;
+  if(characterPosX <= 1.8 && characterPosX >= 0 && characterPosZ <= 0 && characterPosZ >= -1.8) return 9;
+  if(characterPosX <= 0 && characterPosX >= -1.8 && characterPosZ <= 0 && characterPosZ >= -1.8) return 10;
+  if(characterPosX <= -1.8 && characterPosX >= -3.6 && characterPosZ <= 0 && characterPosZ >= -1.8) return 11;
+  if(characterPosX <= 3.6 && characterPosX >= 1.8 && characterPosZ <= -1.8 && characterPosZ >= -3.6) return 12;
+  if(characterPosX <= 1.8 && characterPosX >= 0 && characterPosZ <= -1.8 && characterPosZ >= -3.6) return 13;
+  if(characterPosX <= 0 && characterPosX >= -1.8 && characterPosZ <= -1.8 && characterPosZ >= -3.6) return 14;
+  if(characterPosX <= -1.8 && characterPosX >= -3.6 && characterPosZ <= -1.8 && characterPosZ >= -3.6) return 15;
+  return -1;
+}
+
 void plataformas()
 {
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, 0.9);
+  glTranslatef(2.7, 0.0, 2.7);
   flagTextura = 1;
   chao(0);
   flagTextura = 0;
-
+ 
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, -0.9);
+  glTranslatef(0.9, 0.0, 2.7);
   flagTextura = 1;
   chao(1);
   flagTextura = 0;
@@ -435,7 +475,7 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, 2.7);
+  glTranslatef(-0.9, 0.0, 2.7);
   flagTextura = 1;
   chao(2);
   flagTextura = 0;
@@ -443,7 +483,7 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(0.9, 0.0, -2.7);
+  glTranslatef(-2.7, 0.0, 2.7);
   flagTextura = 1;
   chao(3);
   flagTextura = 0;
@@ -451,15 +491,15 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, 0.9);
+  glTranslatef(2.7, 0.0, 0.9);
   flagTextura = 1;
   chao(4);
   flagTextura = 0;
-
+  
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, -0.9);
+  glTranslatef(0.9, 0.0, 0.9);
   flagTextura = 1;
   chao(5);
   flagTextura = 0;
@@ -467,7 +507,7 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, 2.7);
+  glTranslatef(-0.9, 0.0, 0.9);
   flagTextura = 1;
   chao(6);
   flagTextura = 0;
@@ -475,15 +515,15 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-0.9, 0.0, -2.7);
+  glTranslatef(-2.7, 0.0, 0.9);
   flagTextura = 1;
   chao(7);
   flagTextura = 0;
-
+  
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, 0.9);
+  glTranslatef(2.7, 0.0, -0.9);
   flagTextura = 1;
   chao(8);
   flagTextura = 0;
@@ -491,47 +531,47 @@ void plataformas()
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, -0.9);
+  glTranslatef(0.9, 0.0, -0.9);
   flagTextura = 1;
   chao(9);
   flagTextura = 0;
-
+  
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, 2.7);
+  glTranslatef(-0.9, 0.0, -0.9);
   flagTextura = 1;
   chao(10);
   flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(2.7, 0.0, -2.7);
-  flagTextura = 1;
-  chao(11);
-  flagTextura = 0;
-
-  glPopMatrix();
-  glPushMatrix();
-  glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, 0.9);
-  flagTextura = 1;
-  chao(12);
-  flagTextura = 0;
-
+  
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
   glTranslatef(-2.7, 0.0, -0.9);
   flagTextura = 1;
-  chao(13);
+  chao(11);
   flagTextura = 0;
-
+  
   glPopMatrix();
   glPushMatrix();
   glRotatef(0.0, 0.0, 1.0, 0.0);
-  glTranslatef(-2.7, 0.0, 2.7);
+  glTranslatef(2.7, 0.0, -2.7);
+  flagTextura = 1;
+  chao(12);
+  flagTextura = 0;
+  
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(0.9, 0.0, -2.7);
+  flagTextura = 1;
+  chao(13);
+  flagTextura = 0;
+  
+  glPopMatrix();
+  glPushMatrix();
+  glRotatef(0.0, 0.0, 1.0, 0.0);
+  glTranslatef(-0.9, 0.0, -2.7);
   flagTextura = 1;
   chao(14);
   flagTextura = 0;
@@ -559,6 +599,10 @@ void desenha()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_DEPTH_TEST);
   glMatrixMode(GL_MODELVIEW);
+
+  system("cls");
+  printf("Pontuacao atual: %d\n", pontuacao);
+
   if (!flagRotating)
   {
     characterPosX += moveZ * sin(anguloDeVista * PI / 180);
@@ -578,8 +622,6 @@ void desenha()
     cameraPosZ = characterPosZ - 2.8 * cos(anguloDeVista * PI / 180);
   }
 
-  printf("\nCoordenadas do boneco: %f; %f\n", characterPosX, characterPosZ);
-  printf("Coordenadas da camera: %f; %f\n", cameraPosX, cameraPosZ);
 
   glLoadIdentity();
   gluLookAt(cameraPosX, cameraPosY, cameraPosZ, characterPosX,
@@ -684,14 +726,143 @@ void keyboard(unsigned char key, int x, int y)
   glutPostRedisplay();
 }
 
+void timerVerifica()
+{
+  mingw_gettimeofday(&lastTime, NULL);
+  int chaoPersonagem = verificaChaoDoPersonagem(); 
+  if(textura_atual[chaoPersonagem] == textura_atual[16]){
+    pontuacao++;
+  }else{
+    if(pontuacao > 0)
+      pontuacao--;
+  }
+  glutPostRedisplay();
+  glutTimerFunc( 0, timerRodada, 0);
+}
+
+void timerPlataforma()
+{
+  mingw_gettimeofday(&lastTime, NULL);
+  for(int contador = 0; contador < 16; contador++){
+    textura_atual[contador] = textura_aux[contador];
+  }
+  textura_atual[16] = chosenValue();
+  glutPostRedisplay();
+  glutTimerFunc(intervaloRodada, timerVerifica, 0);
+}
+
+void timerRodada()
+{
+  mingw_gettimeofday(&lastTime, NULL);
+  for (int cont = 0; cont < 17; cont++)
+  {
+    textura_atual[cont] = 0;
+  }
+  glutPostRedisplay();
+  glutTimerFunc(0, timerPisca, 0);
+}
+
+void generateVisibleBoarda(int tamanho) {
+    minPosicoes = boardSize / 2;
+    maxPosicoes = 2 * boardSize / 3;
+    for (int i = 0; i < tamanho; i++){
+        visibleBoard[i] = 0;
+    }
+
+    int numeroPosicoes = rand() % (maxPosicoes - minPosicoes + 1) + minPosicoes;
+
+    for (int i = 0; i < numeroPosicoes; i++) {
+        int posicao = rand() % tamanho;
+        visibleBoard[posicao] = 1;
+    }
+
+}
+
+void timerPisca(){
+  mingw_gettimeofday(&lastTime, NULL);
+  switch (pisca)
+  {
+  case 0:
+    generateBoard(textura_aux, 16);
+    generateVisibleBoarda(16);
+    for(int x=0; x < 16; x++){
+      if(visibleBoard[x] == 1){
+        textura_atual[x] = textura_aux[x];
+      }else{
+        textura_atual[x] = 0;
+      }
+    }
+    pisca++;
+    glutPostRedisplay();
+    glutTimerFunc(2500, timerPisca, 0);
+    break;
+  case 1:
+    generateVisibleBoarda(16);
+    for(int x=0; x < 16; x++){
+      if(visibleBoard[x] == 1){
+        textura_atual[x] = textura_aux[x];
+      }else{
+        textura_atual[x] = 0;
+      }
+    }
+    pisca++;
+    glutPostRedisplay();
+    glutTimerFunc(2500, timerPisca, 0);
+    break;
+  case 2:
+    generateVisibleBoarda(16);
+    for(int x=0; x < 16; x++){
+      if(visibleBoard[x] == 1){
+        textura_atual[x] = textura_aux[x];
+      }else{
+        textura_atual[x] = 0;
+      }
+    }
+    pisca++;
+    glutPostRedisplay();
+    glutTimerFunc(2500, timerPisca, 0);
+    break;
+  case 3:
+    generateVisibleBoarda(16);
+    for(int x=0; x < 16; x++){
+      if(visibleBoard[x] == 1){
+        textura_atual[x] = textura_aux[x];
+      }else{
+        textura_atual[x] = 0;
+      }
+    }
+    pisca++;
+    glutPostRedisplay();
+    glutTimerFunc(2500, timerPisca, 0);
+    break;
+  case 4:
+    generateVisibleBoarda(16);
+    for(int x=0; x < 16; x++){
+      if(visibleBoard[x] == 1){
+        textura_atual[x] = textura_aux[x];
+      }else{
+        textura_atual[x] = 0;
+      }
+    }
+    pisca = 0;
+    glutPostRedisplay();
+    glutTimerFunc(0, timerPlataforma, 0);
+    break;
+  }
+  glutPostRedisplay();
+  
+}
+
 int main(int argc, char *argv[])
 {
-  for (int cont = 0; cont < 16; cont++)
+  for (int cont = 0; cont < 17; cont++)
   {
-    textura_atual[cont] = getRandomTexture();
-    printf("textura %d ", textura_atual[cont]);
+    textura_atual[cont] = 0;
   }
+  srand(time(NULL));
+
   glutInit(&argc, argv);
+  glutTimerFunc(0, timerRodada, 0);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowPosition(50, 50);
   glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);

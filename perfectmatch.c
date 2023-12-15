@@ -3,7 +3,7 @@
 #include <time.h>
 //#include <windows.h>
 
-int boardSize;
+int boardSize = 16;
 int minPosicoes;
 int maxPosicoes;
 
@@ -32,6 +32,9 @@ void generateBoard(int *board, int size) {
 }
 
 void generateVisibleBoard(int *board, int tamanho) {
+    minPosicoes = boardSize / 2;
+    maxPosicoes = 2 * boardSize / 3;
+    
     for (int i = 0; i < tamanho; i++){
         board[i] = 0;
     }
@@ -79,7 +82,7 @@ void printBoardOnlyVisibles(int *board){
 }
 
 void printBoardOnlyPickedFruit(int *board, int pickedFruit){
-
+    
     int viravira[boardSize];
 
     generateVisibleBoard(viravira, 16);
@@ -97,40 +100,40 @@ void printBoardOnlyPickedFruit(int *board, int pickedFruit){
     }
 }
 
-int main(){
+// int main(){
 
-    srand(time(NULL));
-    boardSize = 16;
-    minPosicoes = boardSize / 2;
-    maxPosicoes = 2 * boardSize / 3;
+//     srand(time(NULL));
+//     boardSize = 16;
+//     minPosicoes = boardSize / 2;
+//     maxPosicoes = 2 * boardSize / 3;
 
-    int board[boardSize];
+//     int board[boardSize];
 
-    for(int i = 0; i < 3; i++){
+//     for(int i = 0; i < 3; i++){
 
-        generateBoard(board, 16);
-        printf("TABULEIRO GERADO:\n");
-        printBoard(board);
+//         generateBoard(board, 16);
+//         printf("TABULEIRO GERADO:\n");
+//         printBoard(board);
 
-        for(int j = 0; j < 7; j++){    // Tabuleiro pisca no console por 14 segundos
-            //Sleep(1000);
-            //system("cls");
-            //Sleep(1000);
-            printBoardOnlyVisibles(board);
-            printf("\n");
-        }
+//         for(int j = 0; j < 7; j++){    // Tabuleiro pisca no console por 14 segundos
+//             //Sleep(1000);
+//             //system("cls");
+//             //Sleep(1000);
+//             printBoardOnlyVisibles(board);
+//             printf("\n");
+//         }
 
-        //Sleep(2000);   // 2 segundos para revelar o elemento sorteado
-        int fruta_escolhida = chosenValue();
+//         //Sleep(2000);   // 2 segundos para revelar o elemento sorteado
+//         int fruta_escolhida = chosenValue();
     
-        printf("Numero sorteado: %d da rodada %d\n\n", fruta_escolhida, i);
-        printBoardOnlyPickedFruit(board, fruta_escolhida);
+//         printf("Numero sorteado: %d da rodada %d\n\n", fruta_escolhida, i);
+//         printBoardOnlyPickedFruit(board, fruta_escolhida);
         
-        printf("\n");
+//         printf("\n");
 
-        //Sleep(5000);    // 5 segundos para se locomover ate a plataforma segura
-        //system("cls");
-    }
+//         //Sleep(5000);    // 5 segundos para se locomover ate a plataforma segura
+//         //system("cls");
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
