@@ -39,6 +39,7 @@ void timerRodada();
 void timerPlataforma();
 void timerPisca();
 void timerVerifica();
+void timerMostraResposta();
 
 GLuint texture_id[MAX_NO_TEXTURES];
 
@@ -735,6 +736,9 @@ void keyboard(unsigned char key, int x, int y)
 void timerVerifica()
 {
   mingw_gettimeofday(&lastTime, NULL);
+  for(int contador = 0; contador < 16; contador++){
+    textura_atual[contador] = textura_aux[contador];
+  }
   int chaoPersonagem = verificaChaoDoPersonagem(); 
   if(textura_atual[chaoPersonagem] == textura_atual[16]){
     pontuacao++;
@@ -743,14 +747,20 @@ void timerVerifica()
       pontuacao--;
   }
   glutPostRedisplay();
-  glutTimerFunc( 0, timerRodada, 0);
+  glutTimerFunc( 0, timerMostraResposta, 0);
+}
+
+void timerMostraResposta(){
+  mingw_gettimeofday(&lastTime, NULL);
+
+  glutTimerFunc( 3000, timerRodada, 0);
 }
 
 void timerPlataforma()
 {
   mingw_gettimeofday(&lastTime, NULL);
   for(int contador = 0; contador < 16; contador++){
-    textura_atual[contador] = textura_aux[contador];
+    textura_atual[contador] = 0;
   }
   textura_atual[16] = chosenValue();
   glutPostRedisplay();
